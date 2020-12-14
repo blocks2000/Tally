@@ -17,6 +17,7 @@ import com.kotlin.dally2.frag_chart.IncomeChartFragment
 import com.kotlin.dally2.frag_chart.OutcomeChartFragment
 import com.kotlin.dally2.utils.CalendarDialog
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MothChartActivity : AppCompatActivity() {
     lateinit var inBtn: Button
@@ -31,7 +32,7 @@ class MothChartActivity : AppCompatActivity() {
     var cmonth = 0
     var selectPos = -1
     var selectMonth = -1
-    lateinit var chartFragList: MutableList<Fragment>
+    lateinit var chartFragList: ArrayList<Fragment>
     private var incomeChartFragment: IncomeChartFragment? = null
     private var outcomeChartFragment: OutcomeChartFragment? = null
     private var chartAdapter: ChartAdapter? = null
@@ -42,23 +43,23 @@ class MothChartActivity : AppCompatActivity() {
         initTime() //初始化时间
         initTopTextView(cyear, cmonth) //头布局文字展示
         initFrag() //吧收入和支出的fragment添加到布局里
-        setVPSelectListener()
+//        setVPSelectListener()
 
         back.setOnClickListener { finish() }
         calender.setOnClickListener { showCalendarDialog() }
         inBtn.setOnClickListener {
             setButtonStyle(1)
-            chartVp!!.currentItem = 1
+            chartVp.currentItem = 1
         }
         outBtn.setOnClickListener {
             setButtonStyle(0)
-            chartVp!!.currentItem = 0
+            chartVp.currentItem = 0
         }
 
     }
 
     private fun setVPSelectListener() {
-        chartVp!!.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
+        chartVp.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 setButtonStyle(position)
             }
@@ -118,27 +119,27 @@ class MothChartActivity : AppCompatActivity() {
         val dialog = CalendarDialog(this, selectPos, selectMonth)
         dialog.show()
         dialog.setDialogSize()
-//        dialog.setOnRefresh { selPos, year, month ->
-//            selectPos = selPos
-//            selectMonth = month
-//            incomeChartFragment!!.setData(year, month)
-//            outcomeChartFragment!!.setData(year, month)
-//            initTopTextView(year, month)
-//        }
+        dialog.setOnRefresh { selPos, year, month ->
+            selectPos = selPos
+            selectMonth = month
+            incomeChartFragment!!.setData(year, month)
+            outcomeChartFragment!!.setData(year, month)
+            initTopTextView(year, month)
+        }
     }
 
     //设置按钮样式的改变  支出为0  收入为1
     private fun setButtonStyle(kind: Int) {
         if (kind == 0) {
-            outBtn!!.setBackgroundResource(R.drawable.main_recordbtn_bg)
-            outBtn!!.setTextColor(Color.WHITE)
-            inBtn!!.setBackgroundResource(R.drawable.dialog_btn_bg)
-            inBtn!!.setTextColor(Color.BLACK)
+            outBtn.setBackgroundResource(R.drawable.main_recordbtn_bg)
+            outBtn.setTextColor(Color.WHITE)
+            inBtn.setBackgroundResource(R.drawable.dialog_btn_bg)
+            inBtn.setTextColor(Color.BLACK)
         } else if (kind == 1) {
-            inBtn!!.setBackgroundResource(R.drawable.main_recordbtn_bg)
-            inBtn!!.setTextColor(Color.WHITE)
-            outBtn!!.setBackgroundResource(R.drawable.dialog_btn_bg)
-            outBtn!!.setTextColor(Color.BLACK)
+            inBtn.setBackgroundResource(R.drawable.main_recordbtn_bg)
+            inBtn.setTextColor(Color.WHITE)
+            outBtn.setBackgroundResource(R.drawable.dialog_btn_bg)
+            outBtn.setTextColor(Color.BLACK)
         }
     }
 }

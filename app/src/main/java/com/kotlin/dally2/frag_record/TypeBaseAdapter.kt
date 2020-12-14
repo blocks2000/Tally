@@ -24,14 +24,13 @@ class TypeBaseAdapter(var context: Context?, var mData: List<TypeBean>) : BaseAd
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-        var convertView = convertView
-        convertView = LayoutInflater.from(context).inflate(R.layout.item_recordfrag_gv, parent, false)
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        var view = LayoutInflater.from(context).inflate(R.layout.item_recordfrag_gv, parent, false)
         //获取指定位置的数据源
         val typeBean = mData[position]
         //得到布局上的各个控件
-        val item_iv = convertView.findViewById<ImageView>(R.id.item_recordfrag_iv)
-        val item_tv = convertView.findViewById<TextView>(R.id.item_recordfrag_tv)
+        val item_iv = view.findViewById<ImageView>(R.id.item_recordfrag_iv)
+        val item_tv = view.findViewById<TextView>(R.id.item_recordfrag_tv)
         item_tv.text = typeBean.typename
         //判断当前位置是否为选中位置
         if (selectPos == position) {
@@ -39,7 +38,7 @@ class TypeBaseAdapter(var context: Context?, var mData: List<TypeBean>) : BaseAd
         } else {
             item_iv.setImageResource(typeBean.simageId)
         }
-        return convertView
+        return view
     }
 
 }

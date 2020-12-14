@@ -15,10 +15,11 @@ import com.kotlin.dally2.adapter.ChartItemAdapter
 import com.kotlin.dally2.db.ChartItemBean
 import com.kotlin.dally2.db.DBManager
 import java.util.*
+import kotlin.collections.ArrayList
 
 abstract class BaseChartFragment : Fragment() {
     lateinit var chartLv: ListView
-    var mDatas: MutableList<ChartItemBean>? = null
+    var mDatas: ArrayList<ChartItemBean>? = null
     var year = 0
     var month = 0
     private var adapter: ChartItemAdapter? = null
@@ -39,7 +40,7 @@ abstract class BaseChartFragment : Fragment() {
         //设置数据源
         mDatas = ArrayList()
         //设置适配器
-        adapter = ChartItemAdapter(context, mDatas as ArrayList<ChartItemBean>)
+        adapter = ChartItemAdapter(context, mDatas!!)
         chartLv.setAdapter(adapter)
         //添加柱状图头布局
         addLVHeaderView()
@@ -50,7 +51,7 @@ abstract class BaseChartFragment : Fragment() {
         //将布局转换为View对象
         val headerView = layoutInflater.inflate(R.layout.item_chartfrag_top, null)
         //将View添加到listView的头布局上
-        chartLv!!.addHeaderView(headerView)
+        chartLv.addHeaderView(headerView)
         //查找头布局中的控件
         barChart = headerView.findViewById(R.id.item_chartfrag_chart)
         chartTv = headerView.findViewById(R.id.item_chartfrag_top_tv)
@@ -68,7 +69,7 @@ abstract class BaseChartFragment : Fragment() {
     //设置柱状图坐标轴的显示
     private fun setAxis(year: Int, month: Int) {
         //设置x轴
-        val xAxis = barChart!!.xAxis
+        val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM //设置x轴显示在下方
         xAxis.setDrawGridLines(true) //设置绘制该轴网格线
         xAxis.labelCount = 31 //设置x轴标签的个数
@@ -105,8 +106,8 @@ abstract class BaseChartFragment : Fragment() {
         this.year = year
         this.month = month
         //清空柱状图当中的数据
-        barChart!!.clear()
-        barChart!!.invalidate() //重新绘制柱状图
+        barChart.clear()
+        barChart.invalidate() //重新绘制柱状图
         setAxis(year, month)
         setAxisData(year, month)
     }

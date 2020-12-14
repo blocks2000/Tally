@@ -73,7 +73,7 @@ class CalendarDialog : Dialog {
             val month = position + 1
             val year = adapter!!.year
             //获取被选中的年份和月份,并且为了保持点过的记录，与HistoryActivity进行传递数据
-            onRefresh?.invoke(position,year,month)
+            onRefresh?.invoke(selectPos,year,month)
             cancel()
         }
     }
@@ -136,12 +136,12 @@ class CalendarDialog : Dialog {
 
     //传入被选中的位置，改变位置上的背景和文字颜色
     private fun changeTvbg(selectPos: Int) {
-        for (i in hsvViewList!!) {
+        for (i in hsvViewList) {
             val view = i
             view.setBackgroundResource(R.drawable.dialog_btn_bg)
             view.setTextColor(Color.BLACK)
         }
-        val selView = hsvViewList!![selectPos]
+        val selView = hsvViewList[selectPos]
         selView.setBackgroundResource(R.drawable.main_recordbtn_bg)
         selView.setTextColor(Color.WHITE)
     }

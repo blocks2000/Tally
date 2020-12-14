@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //记录页面当中的支出模块
-abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
+abstract class BaseRecordFragment : Fragment(){
      lateinit var typeList: ArrayList<TypeBean>
     var keyboardView: KeyboardView? = null
     lateinit var moneyEt: EditText
@@ -33,6 +33,9 @@ abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
     lateinit var typeGv: GridView
     var adapter: TypeBaseAdapter? = null
     var accountBean: AccountBean? = null
+    companion object {
+        private const val TAG = "realMonth"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         accountBean = AccountBean()
@@ -44,6 +47,7 @@ abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_outcome, container, false)
+        //初始化组件和键盘
         initView(view)
         //给gridView填充数据
         loadDataToGv()
@@ -51,6 +55,9 @@ abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
         setGvListener()
         //初始化时间
         setInitTime()
+
+        timeTv.setOnClickListener { showTimeDialog() }  //如果用户自己设置了时间，则把用户设置的时间加入数据库
+        comment.setOnClickListener { showComment() }  //点击备注文字选项时，弹出对话框
         return view
     }
 
@@ -106,8 +113,6 @@ abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
         typeTv = view.findViewById(R.id.frag_record_tv_type)
         comment = view.findViewById(R.id.frag_record_tv_comment)
         timeTv = view.findViewById(R.id.frag_record_tv_time)
-        comment.setOnClickListener(this)
-        timeTv.setOnClickListener(this)
         //让自定义键盘显示出来
         val boardUtils = KeyboardUtils(keyboardView, moneyEt)
         boardUtils.showKeyboard()
@@ -130,19 +135,12 @@ abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
 
     //让子类重写这个方法
     abstract fun saveAccountToDB()
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.frag_record_tv_time ->                 //如果用户自己设置了时间，则把用户设置的时间加入数据库
-                showTimeDialog()
-            R.id.frag_record_tv_comment -> showComment()
-        }
-    }
 
     private fun showTimeDialog() {
         val dialog = SelectTimeDialog(context!!)
         dialog.show()
         //设定确定按钮被点击了的监听器
-        dialog.setOnEnsureListener { time, year, month, day ->
+        dialog.setOnsureListener { time, year, month, day ->
             timeTv!!.text = time
             accountBean?.time =time
             accountBean?.year=year
@@ -165,7 +163,4 @@ abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    companion object {
-        private const val TAG = "realMonth"
-    }
 }

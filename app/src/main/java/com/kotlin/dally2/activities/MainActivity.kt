@@ -13,19 +13,21 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.dally2.R
 import com.kotlin.dally2.adapter.AccountAdapter
+import com.kotlin.dally2.adapter.normalAdapter
 import com.kotlin.dally2.db.AccountBean
 import com.kotlin.dally2.db.DBManager
 import com.kotlin.dally2.utils.BudgetDialog
 import com.kotlin.dally2.utils.mmoreDialog
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(){
     lateinit var todayLv: ListView
     lateinit var searchIv: ImageView
     lateinit var editBtn: Button
     lateinit var moreBtn: ImageButton
-     var mDatas: MutableList<AccountBean>?=null
-    lateinit var adapter: AccountAdapter
+     var mDatas: ArrayList<AccountBean>?=null
+    lateinit var adapter:AccountAdapter
     var year = 0
     var month = 0
     var day = 0
@@ -78,10 +80,10 @@ class MainActivity : AppCompatActivity(){
         }
 
         //要把数据放入mDatas
-        mDatas = DBManager.getAccountListOneDay(year, month, day).toMutableList()
+        mDatas = DBManager.getAccountListOneDay(year, month, day)
         //设置适配器，加载每一行数据到列表当中
         adapter = AccountAdapter(this, mDatas!!)
-        todayLv!!.adapter = adapter
+        todayLv.adapter = adapter
     }
 
     //初始化viw
@@ -96,7 +98,7 @@ class MainActivity : AppCompatActivity(){
 
     //设置ListView的长按事件
     private fun setLVLongClickListener() {
-        todayLv!!.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id ->
+        todayLv.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id ->
             if (position == 0) return@OnItemLongClickListener false //如果点击了头布局，就没有事件发生
             val pos = position - 1
             val clickBean = mDatas!![pos] //获取正在被点击的这条信息
@@ -116,7 +118,7 @@ class MainActivity : AppCompatActivity(){
                     val click_id = clickBean?.id
                     DBManager.deleteAccItemById(click_id!!)
                     mDatas!!.remove(clickBean) //实时刷新，移出集合当中的对象
-                    adapter!!.notifyDataSetChanged() //提示适配器更新数据
+                    adapter.notifyDataSetChanged() //提示适配器更新数据
                     setTopTvShow() //改变头布局显示的内容
                 }
         builder.create().show() //注意定义好以后还要创建对话框和显示
@@ -126,7 +128,7 @@ class MainActivity : AppCompatActivity(){
     private fun addLVHeaderView() {
         //将布局文件转换为view
         headerView = layoutInflater.inflate(R.layout.item_mainlv_top, null)
-        todayLv!!.addHeaderView(headerView)
+        todayLv.addHeaderView(headerView)
         //找到头布局的控件
         topOutTv = headerView.findViewById(R.id.item_mainlv_top_tv_out)
         topInTv = headerView.findViewById(R.id.item_mainlv_top_tv_in)
@@ -157,29 +159,29 @@ class MainActivity : AppCompatActivity(){
         val outComeOneDay = DBManager.getSumMoneyOneDay(year, month, day, 0)
         val inComeOneDay = DBManager.getSumMoneyOneDay(year, month, day, 1)
         val infoOneDay = "今日支出 ￥$outComeOneDay  收入 ￥$inComeOneDay"
-        topConTv!!.text = infoOneDay
+        topConTv.text = infoOneDay
 
         //获取本月收入和支出总金额
         val outComeOneMonth = DBManager.getSumMoneyOneMonth(year, month, 0)
         val inComeOneMonth = DBManager.getSumMoneyOneMonth(year, month, 1)
-        topInTv!!.text = "￥$inComeOneMonth"
-        topOutTv!!.text = "￥$outComeOneMonth"
+        topInTv.text = "￥$inComeOneMonth"
+        topOutTv.text = "￥$outComeOneMonth"
 
         //设置显示剩余预算
-        val bmoney = preferences!!.getFloat("bmoney", 0f) //获得预算
+        val bmoney = preferences.getFloat("bmoney", 0f) //获得预算
         if (bmoney == 0f) {
-            topbudgetTv!!.text = "￥ 0"
+            topbudgetTv.text = "￥ 0"
         } else {
             val syMoney = bmoney - outComeOneMonth
-            topbudgetTv!!.text = "￥ $syMoney"
+            topbudgetTv.text = "￥ $syMoney"
         }
     }
 
     private fun loadDBData() {
         val list = DBManager.getAccountListOneDay(year, month, day)
         mDatas!!.clear()
-        mDatas!!.addAll(list!!)
-        adapter!!.notifyDataSetChanged()
+        mDatas!!.addAll(list)
+        adapter.notifyDataSetChanged()
     }
 
 
@@ -188,14 +190,14 @@ class MainActivity : AppCompatActivity(){
         val dialog = BudgetDialog(this)
         dialog.show()
         dialog.setOnEnsureListener { money ->
-            val editor = preferences!!.edit()
+            val editor = preferences.edit()
             editor.putFloat("bmoney", money)
             editor.commit()
 
             //计算剩余金额
             val outcomeOneMonth = DBManager.getSumMoneyOneMonth(year, month, 0)
             val syMoney = money - outcomeOneMonth //剩余预算=预算-支出
-            topbudgetTv!!.text = "￥$syMoney"
+            topbudgetTv.text = "￥$syMoney"
         }
     }
 
@@ -204,17 +206,17 @@ class MainActivity : AppCompatActivity(){
     private fun toggleShow() {
         if (isShow) {  //明文变密文
             val passwordMethod = PasswordTransformationMethod.getInstance()
-            topInTv!!.transformationMethod = passwordMethod //可以将textView设置为隐藏
-            topOutTv!!.transformationMethod = passwordMethod
-            topbudgetTv!!.transformationMethod = passwordMethod
-            topShowIv!!.setImageResource(R.mipmap.close)
+            topInTv.transformationMethod = passwordMethod //可以将textView设置为隐藏
+            topOutTv.transformationMethod = passwordMethod
+            topbudgetTv.transformationMethod = passwordMethod
+            topShowIv.setImageResource(R.mipmap.close)
             isShow = false //设置标志位为隐藏状态
         } else {  //密文变明文
             val hideMethod = HideReturnsTransformationMethod.getInstance()
-            topInTv!!.transformationMethod = hideMethod //可以将textView设置为隐藏
-            topOutTv!!.transformationMethod = hideMethod
-            topbudgetTv!!.transformationMethod = hideMethod
-            topShowIv!!.setImageResource(R.mipmap.show)
+            topInTv.transformationMethod = hideMethod //可以将textView设置为隐藏
+            topOutTv.transformationMethod = hideMethod
+            topbudgetTv.transformationMethod = hideMethod
+            topShowIv.setImageResource(R.mipmap.show)
             isShow = true //设置标志位为显示状态
         }
     }

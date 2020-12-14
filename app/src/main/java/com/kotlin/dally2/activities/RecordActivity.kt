@@ -2,6 +2,7 @@ package com.kotlin.dally2.activities
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
@@ -16,15 +17,19 @@ import kotlin.collections.ArrayList
 class RecordActivity : AppCompatActivity() {
     var tabLayout: TabLayout? = null
     var viewPager: ViewPager? = null
+    lateinit var back:ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record)
         //首先查找控件
         tabLayout = findViewById(R.id.record_tabs)
         viewPager = findViewById(R.id.record_vp)
+        back=findViewById(R.id.record_iv_back)
 
         //再设置ViewPager加载页面
         initPager()
+        //返回按钮的点击事件
+        back.setOnClickListener { finish() }
     }
 
     private fun initPager() {
@@ -44,10 +49,5 @@ class RecordActivity : AppCompatActivity() {
         tabLayout!!.setupWithViewPager(viewPager)
     }
 
-    //点击事件
-    fun onClick(view: View) {
-        when (view.id) {
-            R.id.record_iv_back -> finish()
-        }
-    }
+
 }

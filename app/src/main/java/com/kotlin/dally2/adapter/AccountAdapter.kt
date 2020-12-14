@@ -12,10 +12,11 @@ import com.kotlin.dally2.R
 import com.kotlin.dally2.activities.HistoryActivity
 import com.kotlin.dally2.db.AccountBean
 import java.util.*
+import kotlin.collections.ArrayList
 
-class AccountAdapter(context:Context, mDatas: MutableList<AccountBean>) : BaseAdapter() {
+class AccountAdapter(context:Context, mDatas: ArrayList<AccountBean>) : BaseAdapter() {
     private var context:Context?=null
-    private var mDatas:MutableList<AccountBean>?=null
+    private var mDatas:ArrayList<AccountBean>?=null
     var year: Int
     var month: Int
     var day: Int
@@ -39,9 +40,9 @@ class AccountAdapter(context:Context, mDatas: MutableList<AccountBean>) : BaseAd
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-        var holder:ViewHolder
-        var view:View
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val holder:ViewHolder
+        val view:View
         if (convertView==null){
             view= View.inflate(context,R.layout.item_mainlv,null)
             holder=ViewHolder(view)

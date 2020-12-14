@@ -29,7 +29,7 @@ class SettingActivity : AppCompatActivity() {
                 .setNegativeButton("取消", null)
                 .setPositiveButton("确定") { dialog, which ->
                     DBManager.deleteAllAccount()
-                    Toast.makeText(this@SettingActivity, "删除成功！", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "删除成功！", Toast.LENGTH_SHORT).show()
                 }
         builder.create().show()
     }

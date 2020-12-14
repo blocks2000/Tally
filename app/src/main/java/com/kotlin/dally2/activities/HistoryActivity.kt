@@ -1,18 +1,12 @@
 package com.kotlin.dally2.activities
 
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.dally2.R
-import com.kotlin.dally2.adapter.AccountAdapter
 import com.kotlin.dally2.adapter.normalAdapter
 import com.kotlin.dally2.db.AccountBean
 import com.kotlin.dally2.db.DBManager
@@ -40,7 +34,7 @@ class HistoryActivity : AppCompatActivity() {
 ////        //设置适配器
         timeTv.setText(year.toString() + "年" + month + "月")
         loadData(year,month)
-        var layoutManager=LinearLayoutManager(this)
+        val layoutManager=LinearLayoutManager(this)
         historyLv=findViewById(R.id.history_lv)
         historyLv.layoutManager=layoutManager
         val adapter=normalAdapter(mDatas)
@@ -53,7 +47,7 @@ class HistoryActivity : AppCompatActivity() {
             cdialog.show()
             cdialog.setDialogSize()
             cdialog.setOnRefresh { selPos, year, month ->
-                    timeTv!!.text = year.toString() + "月" + month + "月"
+                    timeTv.text = year.toString() + "月" + month + "月"
                     mDatas.clear()
                     loadData(year, month)
                     adapter.notifyDataSetChanged()

@@ -48,7 +48,7 @@ class CalendarAdapter(var context: Context, var year: Int) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
         val view=LayoutInflater.from(context).inflate(R.layout.item_dialog_gv,parent,false)
-        var g_tv:TextView=view.findViewById(R.id.item_dialog_gv_tv)
+        val g_tv:TextView=view.findViewById(R.id.item_dialog_gv_tv)
         g_tv.text =mDatas[position]
         g_tv.setBackgroundResource(R.color.grey_f3f3f3)
         g_tv.setTextColor(Color.BLACK)

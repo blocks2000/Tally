@@ -12,7 +12,6 @@ import com.kotlin.dally2.db.ChartItemBean
 import com.kotlin.dally2.utils.FloatUtils
 
 class ChartItemAdapter(var context: Context?, var mDatas: List<ChartItemBean>) : BaseAdapter() {
-    var inflater: LayoutInflater
     override fun getCount(): Int {
         return mDatas.size
     }
@@ -25,26 +24,27 @@ class ChartItemAdapter(var context: Context?, var mDatas: List<ChartItemBean>) :
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-        var convertView = convertView
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val view:View
         var holder: ViewHolder? = null
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_chartfrag_lv, parent, false)
-            holder = ViewHolder(convertView)
-            convertView.tag = holder
+            view = View.inflate(context,R.layout.item_chartfrag_lv,null )
+            holder = ViewHolder(view)
+            view.tag = holder
         } else {
-            holder = convertView.tag as ViewHolder
+            view=convertView
+            holder = view.tag as ViewHolder
         }
 
         //获取显示内容
         val bean = mDatas[position]
-        holder!!.iv.setImageResource(bean.getsImageId())
+        holder.iv.setImageResource(bean.getsImageId())
         holder.typeTv.text = bean.type
         val ratio = bean.ratio
         val pert = FloatUtils.ratioToPercent(ratio)
         holder.ratioTv.text = pert
         holder.totalTv.text = "￥ " + bean.totalMoney
-        return convertView
+        return view
     }
 
     internal inner class ViewHolder(view: View) {
@@ -61,7 +61,4 @@ class ChartItemAdapter(var context: Context?, var mDatas: List<ChartItemBean>) :
         }
     }
 
-    init {
-        inflater = LayoutInflater.from(context)
-    }
 }

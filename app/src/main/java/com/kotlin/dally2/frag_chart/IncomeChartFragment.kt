@@ -21,11 +21,11 @@ class IncomeChartFragment : BaseChartFragment() {
         val sets: MutableList<IBarDataSet> = ArrayList()
         //获取这个月每天的支出金额
         val list = DBManager.getSumMoneyODIM(year, month, kind)
-        if (list!!.size == 0) {
-            barChart!!.visibility = View.GONE
+        if (list.size == 0) {
+            barChart.visibility = View.GONE
             chartTv!!.visibility = View.VISIBLE
         } else {
-            barChart!!.visibility = View.VISIBLE
+            barChart.visibility = View.VISIBLE
             chartTv!!.visibility = View.GONE
             //设置有多少根柱子
             val barEntries: MutableList<BarEntry> = ArrayList()
@@ -54,7 +54,7 @@ class IncomeChartFragment : BaseChartFragment() {
             sets.add(barDataSet)
             val barData = BarData(sets)
             barData.barWidth = 0.2f //设置柱子的宽度
-            barChart!!.data = barData
+            barChart.data = barData
         }
     }
 
@@ -63,17 +63,17 @@ class IncomeChartFragment : BaseChartFragment() {
         val maxMoney = DBManager.getMaxMoneyODInM(year, month, kind)
         val max = Math.ceil(maxMoney.toDouble()).toFloat() //将最大金额向上取整
         //设置y轴
-        val yAxis_right = barChart!!.axisRight
+        val yAxis_right = barChart.axisRight
         yAxis_right.axisMaximum = max
         yAxis_right.axisMinimum = 0f
         yAxis_right.isEnabled = false
-        val yAxis_left = barChart!!.axisLeft
+        val yAxis_left = barChart.axisLeft
         yAxis_left.axisMaximum = max
         yAxis_left.axisMinimum = 0f
         yAxis_left.isEnabled = false
 
         //设置不显示图例
-        val legend = barChart!!.legend
+        val legend = barChart.legend
         legend.isEnabled = false
     }
 

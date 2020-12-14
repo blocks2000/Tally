@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import com.kotlin.dally2.R
 
-class CommentDialog(context: Context) : Dialog(context), View.OnClickListener {
+class CommentDialog: Dialog {
     lateinit var et: EditText
     lateinit var cancelBtn: Button
     private lateinit var ensureBtn: Button
@@ -19,27 +19,23 @@ class CommentDialog(context: Context) : Dialog(context), View.OnClickListener {
         this.onEnsureListener=onEnsureListener
     }
 
-
-    //对话框被创建时执行
-    override fun onCreate(savedInstanceState: Bundle) {
-        super.onCreate(savedInstanceState)
+    constructor(context: Context):super(context){
         setContentView(R.layout.dialog_comment) //设置对话框要显示哪一个布局
-        //找到布局上的每一个控件
+        initView()
+        onClick()
+    }
+
+    //找到布局上的每一个控件
+    fun initView(){
         et = findViewById(R.id.dialog_comment_et)
         cancelBtn = findViewById(R.id.dialog_comment_btn_cancel)
         ensureBtn = findViewById(R.id.dialog_comment_btn_ensure)
-        cancelBtn.setOnClickListener(this)
-        ensureBtn.setOnClickListener(this)
     }
 
-    interface OnEnsureListener {
-        fun onEnsure()
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.dialog_comment_btn_cancel -> cancel()
-            R.id.dialog_comment_btn_ensure -> if (onEnsureListener != null) {
+    fun onClick(){
+        cancelBtn.setOnClickListener {cancel()}
+        ensureBtn.setOnClickListener {
+            if(onEnsureListener!=null){
                 onEnsureListener!!.invoke()
             }
         }

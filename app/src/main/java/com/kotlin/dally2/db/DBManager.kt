@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.kotlin.dally2.utils.FloatUtils
 import java.util.*
+import kotlin.collections.ArrayList
 
 /*
 * 负责管理数据库
@@ -32,6 +33,7 @@ object DBManager {
             val typeBean = TypeBean(id, typename, imageId, simageId, kind1)
             list.add(typeBean)
         }
+        cursor.close()
         return list
     }
 
@@ -54,8 +56,8 @@ object DBManager {
 
     //获取记账表当中某一天的支出或收入
     //需要输入年月日来进行选择查询
-    fun getAccountListOneDay(year: Int, month: Int, day: Int): MutableList<AccountBean> {
-        val list: MutableList<AccountBean> = ArrayList()
+    fun getAccountListOneDay(year: Int, month: Int, day: Int): ArrayList<AccountBean> {
+        val list = ArrayList<AccountBean>()
         val sql = "select *from accounttb where year=? and month=? and day=?"
         val cursor = db!!.rawQuery(sql, arrayOf(year.toString() + "", month.toString() + "", day.toString() + ""))
         while (cursor.moveToNext()) {
@@ -69,6 +71,7 @@ object DBManager {
             val accountBean = AccountBean(id, typename, sImageId, comment, money, time, year, month, day, kind)
             list.add(accountBean)
         }
+        cursor.close()
         return list
     }
 
@@ -138,6 +141,7 @@ object DBManager {
             val accountBean = AccountBean(id, typename, sImageId, commentb, money, time, year, month, day, kind)
             list.add(accountBean)
         }
+        cursor.close()
         return list
     }
 
@@ -159,6 +163,7 @@ object DBManager {
             val accountBean = AccountBean(id, typename, sImageId, comment, money, time, year, month, day, kind)
             list.add(accountBean)
         }
+        cursor.close()
         return list
     }
 
@@ -172,6 +177,7 @@ object DBManager {
                 val year = cursor.getInt(cursor.getColumnIndex("year"))
                 list.add(year)
             }
+            cursor.close()
             return list
         }
 
@@ -190,6 +196,7 @@ object DBManager {
             val sumRoll = cursor.getInt(cursor.getColumnIndex("count(money)"))
             total = sumRoll
         }
+        cursor.close()
         return total
     }
 
@@ -209,6 +216,7 @@ object DBManager {
             val bean = ChartItemBean(sImageId, typename, ratio, total)
             list.add(bean)
         }
+        cursor.close()
         return list
     }
 
@@ -232,6 +240,7 @@ object DBManager {
             val itemBean = BarChartItemBean(year, month, day, smoney)
             list.add(itemBean)
         }
+        cursor.close()
         return list
     }
 }

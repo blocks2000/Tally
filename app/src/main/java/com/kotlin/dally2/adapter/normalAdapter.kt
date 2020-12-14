@@ -16,6 +16,15 @@ import com.kotlin.dally2.db.DBManager
 import java.util.*
 
 class normalAdapter(var mdata:List<AccountBean>) : RecyclerView.Adapter<normalAdapter.InnerHolder>() {
+    var year: Int
+    var month: Int
+    var day: Int
+    init {
+        val calendar = Calendar.getInstance()
+        year = calendar[Calendar.YEAR]
+        month = calendar[Calendar.MONTH] + 1
+        day = calendar[Calendar.DAY_OF_MONTH]
+    }
     class InnerHolder(view:View):RecyclerView.ViewHolder(view) {
         var typeIv: ImageView=view.findViewById(R.id.item_mainlv_iv)
         var typeTv: TextView= view.findViewById(R.id.item_mainlv_tv_title)
@@ -59,6 +68,12 @@ class normalAdapter(var mdata:List<AccountBean>) : RecyclerView.Adapter<normalAd
         holder.typeTv.text = accountBean.typename
         holder.commentTv.text = accountBean.comment
         holder.moneyTv.text = "￥" + accountBean?.money
+        if (accountBean.year == year && accountBean.month == month && accountBean.day == day) {
+            val time = accountBean.time?.split(" ".toRegex())?.toTypedArray()?.get(1)
+            holder.timeTv.text = "今天$time"
+        } else {
+            holder.timeTv.text = accountBean.time
+        }
     }
 
 }
