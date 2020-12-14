@@ -19,8 +19,8 @@ object DBManager {
     }
 
     //查询数据库中符合kind的所有数据
-    fun getTypeList(kind: Int): List<TypeBean> {
-        val list: MutableList<TypeBean> = ArrayList()
+    fun getTypeList(kind: Int): ArrayList<TypeBean> {
+        val list= ArrayList<TypeBean>()
         val sql = "select * from typetb where kind=$kind"
         val cursor = db!!.rawQuery(sql, null)
         while (cursor.moveToNext()) {

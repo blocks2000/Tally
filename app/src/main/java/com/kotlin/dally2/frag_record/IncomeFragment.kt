@@ -6,11 +6,8 @@ import com.kotlin.dally2.db.DBManager
 class IncomeFragment : BaseRecordFragment() {
     override fun loadDataToGv() {
         super.loadDataToGv()
-        val mlist=typeList.toMutableList()
         val inlist = DBManager.getTypeList(1)
-        for (i in 0..inlist.size){
-            mlist.add(inlist.get(i))
-        }
+        typeList.addAll(inlist)
         adapter!!.notifyDataSetChanged()
         typeIv!!.setImageResource(R.mipmap.p_more)
         typeTv!!.text = "其他"

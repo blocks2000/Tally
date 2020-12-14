@@ -1,5 +1,6 @@
 package com.kotlin.dally2.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +9,24 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.kotlin.dally2.R
+import com.kotlin.dally2.activities.HistoryActivity
 import com.kotlin.dally2.db.AccountBean
 import java.util.*
 
-class AccountAdapter(var context: Context, var mDatas: MutableList<AccountBean>?) : BaseAdapter() {
-    var inflater: LayoutInflater
+class AccountAdapter(context:Context, mDatas: MutableList<AccountBean>) : BaseAdapter() {
+    private var context:Context?=null
+    private var mDatas:MutableList<AccountBean>?=null
     var year: Int
     var month: Int
     var day: Int
+    init {
+        this.context=context
+        this.mDatas=mDatas
+        val calendar = Calendar.getInstance()
+        year = calendar[Calendar.YEAR]
+        month = calendar[Calendar.MONTH] + 1
+        day = calendar[Calendar.DAY_OF_MONTH]
+    }
     override fun getCount(): Int {
         return mDatas!!.size
     }
@@ -29,50 +40,38 @@ class AccountAdapter(var context: Context, var mDatas: MutableList<AccountBean>?
     }
 
     override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-        var convertView = convertView
-        var holder: ViewHolder? = null
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_mainlv, parent, false)
-            holder = ViewHolder(convertView)
-            convertView.tag = holder
-        } else {
-            holder = convertView.tag as ViewHolder
+        var holder:ViewHolder
+        var view:View
+        if (convertView==null){
+            view= View.inflate(context,R.layout.item_mainlv,null)
+            holder=ViewHolder(view)
+            view.tag=holder
+        }else{
+            view=convertView
+            holder=view.tag as ViewHolder
         }
         val accountBean = mDatas!![position]
-        holder!!.typeIv.setImageResource(accountBean!!.getsImageId())
-        holder.typeTv.text = accountBean?.typename
-        holder.commentTv.text = accountBean?.comment
+        holder.typeIv.setImageResource(accountBean.getsImageId())
+        holder.typeTv.text = accountBean.typename
+        holder.commentTv.text = accountBean.comment
         holder.moneyTv.text = "￥" + accountBean?.money
-        if (accountBean?.year == year && accountBean?.month == month && accountBean?.day == day) {
-            val time = accountBean?.time?.split(" ".toRegex())?.toTypedArray()?.get(1)
+        if (accountBean.year == year && accountBean.month == month && accountBean.day == day) {
+            val time = accountBean.time?.split(" ".toRegex())?.toTypedArray()?.get(1)
             holder.timeTv.text = "今天$time"
         } else {
-            holder.timeTv.text = accountBean?.time
+            holder.timeTv.text = accountBean.time
         }
-        return convertView
+        return view
     }
 
-    internal inner class ViewHolder(view: View) {
-        var typeIv: ImageView
-        var typeTv: TextView
-        var commentTv: TextView
-        var timeTv: TextView
-        var moneyTv: TextView
+     class ViewHolder(view: View) {
+        var typeIv: ImageView=view.findViewById(R.id.item_mainlv_iv)
+        var typeTv: TextView= view.findViewById(R.id.item_mainlv_tv_title)
+        var commentTv: TextView= view.findViewById(R.id.item_mainlv_tv_beizhu)
+        var timeTv:TextView = view.findViewById(R.id.item_mainlv_tv_time)
+        var moneyTv: TextView= view.findViewById(R.id.item_mainlv_tv_money)
 
-        init {
-            typeIv = view.findViewById(R.id.item_mainlv_iv)
-            typeTv = view.findViewById(R.id.item_mainlv_tv_title)
-            timeTv = view.findViewById(R.id.item_mainlv_tv_time)
-            commentTv = view.findViewById(R.id.item_mainlv_tv_beizhu)
-            moneyTv = view.findViewById(R.id.item_mainlv_tv_money)
-        }
     }
 
-    init {
-        inflater = LayoutInflater.from(context)
-        val calendar = Calendar.getInstance()
-        year = calendar[Calendar.YEAR]
-        month = calendar[Calendar.MONTH] + 1
-        day = calendar[Calendar.DAY_OF_MONTH]
-    }
+
 }

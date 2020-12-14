@@ -49,7 +49,7 @@
             android:textColor="@color/pink_d6"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

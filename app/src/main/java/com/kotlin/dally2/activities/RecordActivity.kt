@@ -11,6 +11,7 @@ import com.kotlin.dally2.adapter.RecordPagerAdapter
 import com.kotlin.dally2.frag_record.IncomeFragment
 import com.kotlin.dally2.frag_record.OutcomeFragment
 import java.util.*
+import kotlin.collections.ArrayList
 
 class RecordActivity : AppCompatActivity() {
     var tabLayout: TabLayout? = null
@@ -28,7 +29,7 @@ class RecordActivity : AppCompatActivity() {
 
     private fun initPager() {
         //初始化ViewPager页面的集合
-        val fragmentList: MutableList<Fragment> = ArrayList()
+        val fragmentList: ArrayList<Fragment> = ArrayList()
         //创建收入和支出页面，放在fragment中
         val outfrg = OutcomeFragment() //支出
         val infrg = IncomeFragment() //收入

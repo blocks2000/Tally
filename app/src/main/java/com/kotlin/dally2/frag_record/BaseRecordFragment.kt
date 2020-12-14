@@ -23,7 +23,7 @@ import java.util.*
 
 //记录页面当中的支出模块
 abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
-     lateinit var typeList: List<TypeBean>
+     lateinit var typeList: ArrayList<TypeBean>
     var keyboardView: KeyboardView? = null
     lateinit var moneyEt: EditText
     lateinit var typeIv: ImageView
@@ -94,7 +94,7 @@ abstract class BaseRecordFragment : Fragment(), View.OnClickListener {
     //在子类中重载这个方法，以适应不同的fragment
     open fun loadDataToGv() {
         typeList = ArrayList()
-        adapter = TypeBaseAdapter(context, typeList as ArrayList<TypeBean>)
+        adapter = TypeBaseAdapter(context, typeList)
         typeGv!!.adapter = adapter
     }
 

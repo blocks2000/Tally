@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -24,6 +25,8 @@ class MothChartActivity : AppCompatActivity() {
     lateinit var inTv: TextView
     lateinit var outTv: TextView
     lateinit var chartVp: ViewPager
+    lateinit var back:ImageView
+    lateinit var calender:ImageView
     var cyear = 0
     var cmonth = 0
     var selectPos = -1
@@ -40,6 +43,18 @@ class MothChartActivity : AppCompatActivity() {
         initTopTextView(cyear, cmonth) //头布局文字展示
         initFrag() //吧收入和支出的fragment添加到布局里
         setVPSelectListener()
+
+        back.setOnClickListener { finish() }
+        calender.setOnClickListener { showCalendarDialog() }
+        inBtn.setOnClickListener {
+            setButtonStyle(1)
+            chartVp!!.currentItem = 1
+        }
+        outBtn.setOnClickListener {
+            setButtonStyle(0)
+            chartVp!!.currentItem = 0
+        }
+
     }
 
     private fun setVPSelectListener() {
@@ -66,7 +81,7 @@ class MothChartActivity : AppCompatActivity() {
         chartFragList.add(incomeChartFragment!!)
         //使用适配器,将fragment加载到activity当中
         chartAdapter = ChartAdapter(supportFragmentManager, chartFragList)
-        chartVp!!.adapter = chartAdapter
+        chartVp.adapter = chartAdapter
     }
 
     private fun initTopTextView(year: Int, month: Int) {
@@ -74,9 +89,9 @@ class MothChartActivity : AppCompatActivity() {
         val outRoll = DBManager.getRollOneMonth(year, month, 0)
         val inSum = DBManager.getSumMoneyOneMonth(year, month, 1)
         val outSum = DBManager.getSumMoneyOneMonth(year, month, 0)
-        dateTv!!.text = year.toString() + "年" + month + "月账单"
-        inTv!!.text = "共" + outRoll + "笔支出,￥ " + outSum
-        outTv!!.text = "共" + inRoll + "笔收入,￥ " + inSum
+        dateTv.text = year.toString() + "年" + month + "月账单"
+        inTv.text = "共" + outRoll + "笔支出,￥ " + outSum
+        outTv.text = "共" + inRoll + "笔收入,￥ " + inSum
     }
 
     //初始化时间
@@ -93,35 +108,23 @@ class MothChartActivity : AppCompatActivity() {
         inTv = findViewById(R.id.chart_tv_in)
         outTv = findViewById(R.id.chart_tv_out)
         chartVp = findViewById(R.id.chart_vp)
+        back=findViewById(R.id.chart_iv_back)
+        calender=findViewById(R.id.chart_iv_calendar)
     }
 
-    fun onClick(view: View) {
-        when (view.id) {
-            R.id.chart_iv_back -> finish()
-            R.id.chart_iv_calendar -> showCalendarDialog()
-            R.id.chart_btn_in -> {
-                setButtonStyle(1)
-                chartVp!!.currentItem = 1
-            }
-            R.id.chart_btn_out -> {
-                setButtonStyle(0)
-                chartVp!!.currentItem = 0
-            }
-        }
-    }
 
     //显示日历的对话框
     private fun showCalendarDialog() {
         val dialog = CalendarDialog(this, selectPos, selectMonth)
         dialog.show()
         dialog.setDialogSize()
-        dialog.setOnRefresh { selPos, year, month ->
-            selectPos = selPos
-            selectMonth = month
-            incomeChartFragment!!.setData(year, month)
-            outcomeChartFragment!!.setData(year, month)
-            initTopTextView(year, month)
-        }
+//        dialog.setOnRefresh { selPos, year, month ->
+//            selectPos = selPos
+//            selectMonth = month
+//            incomeChartFragment!!.setData(year, month)
+//            outcomeChartFragment!!.setData(year, month)
+//            initTopTextView(year, month)
+//        }
     }
 
     //设置按钮样式的改变  支出为0  收入为1

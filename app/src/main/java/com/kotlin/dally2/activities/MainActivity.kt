@@ -16,7 +16,6 @@ import com.kotlin.dally2.adapter.AccountAdapter
 import com.kotlin.dally2.db.AccountBean
 import com.kotlin.dally2.db.DBManager
 import com.kotlin.dally2.utils.BudgetDialog
-import com.kotlin.dally2.utils.MoreDialog
 import com.kotlin.dally2.utils.mmoreDialog
 import java.util.*
 
@@ -81,7 +80,7 @@ class MainActivity : AppCompatActivity(){
         //要把数据放入mDatas
         mDatas = DBManager.getAccountListOneDay(year, month, day).toMutableList()
         //设置适配器，加载每一行数据到列表当中
-        adapter = AccountAdapter(this, mDatas)
+        adapter = AccountAdapter(this, mDatas!!)
         todayLv!!.adapter = adapter
     }
 
